@@ -49,7 +49,7 @@ El sistema fue diseñado para demostrar la integración de:
 * Reporte técnico del proyecto (PDF)
 * Código fuente del reporte en LaTeX
 * Código del sistema (microcontrolador e interfaz)
-* Diagramas y descripción del funcionamiento
+* Imagen Proyecto Finalizado
 
 ## Objetivo Académico
 
