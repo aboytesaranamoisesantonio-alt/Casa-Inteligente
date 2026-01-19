@@ -1,0 +1,222 @@
+
+\documentclass[12pt,a4paper]{article}
+\title{Plantilla para trabajos UPIITA}
+\PassOptionsToPackage{spanish}{tracklang}
+\usepackage{UPIITA}
+\asignatura{Asignatura: Programación Avanzada}
+\carrera{Ing. Mecatrónica}
+\titulo{Comunicación TCP/IP.}
+\alumno{Aboytes Arana Moises Antonio}
+\profesor{Cruz Mora Jose Luis }
+
+\begin{document}
+\maketitlepage % Portada
+\newpage
+\tableofcontents %Índice
+\newpage
+\section{Objetivo}
+Crear aplicaciones que se comuniquen por TCP/IP.
+\section{Introducción}
+\subsection{Hilos}
+Un hilo es una secuencia de instrucciones que puede ejecutarse de forma independiente dentro de un programa. Permite que una aplicación realice multitareas, ejecutando procesos de manera concurrente. Los hilos comparten el mismo espacio de memoria y recursos de su proceso principal, lo que facilita la comunicación y el intercambio de datos.
+\\\\Pero, ¿qué diferencia hay entre un hilo y un proceso? Bueno, Mientras que un proceso es una instancia independiente de una aplicación con su propio espacio de memoria, un hilo es más ligero y comparte los recursos y la memoria de su proceso. En un solo proceso pueden existir múltiples hilos trabajando de manera concurrente, lo cual ahorra recursos y optimiza el rendimiento.
+\\\\Algunas ventajas de ocupar hilos en los programas son:
+\begin{itemize}
+    \item Mayor rendimiento: Los hilos pueden ejecutar tareas simultáneamente, aprovechando mejor los procesadores multinúcleo.
+    \item Respuesta rápida: Mantienen la aplicación interactiva incluso cuando se ejecutan operaciones complejas, como cálculos intensivos o procesamiento de datos.
+    \item Eficiencia en multitarea: Permiten manejar varias tareas dentro de una sola aplicación de forma eficiente.
+\end{itemize}
+En la mayoría de lenguajes de programación, puedes crear y gestionar hilos mediante APIs específicas o bibliotecas. Por ejemplo, en Python se usa el módulo threading. 
+
+Es importante señalar que un hilo no puede ejecutarse solo, requiere la supervisión de un proceso; por ello su ejecución está controlada por el contexto de un proceso donde se ejecuta. 
+\subsubsection{Hilos demonio}
+Python proporciona dos tipos de hilos: subprocesos no daemon y daemon. De forma predeterminada, los subprocesos no son subprocesos de demonio.  Estos subprocesos controlan tareas no críticas que pueden ser útiles para la aplicación, pero no la obstaculizan si fallan o se cancelan a mitad de la operación. Además, un hilo de demonio no tendrá control sobre cuándo se termina. El programa finalizará una vez que finalicen todos los subprocesos que no sean de demonio, incluso si todavía hay subprocesos de demonio ejecutándose en ese momento.
+\\Los hilos Daemon tienen la prioridad más baja. 
+
+\subsubsection{Multithreads}
+Un grupo de threads es un conjunto de “hilos de ejecución” que están corriendo todos dentro del mismo proceso. Dado que comparten todos la misma porción de memoria, pueden acceder a las mismas variables globales, los mismos descriptores de archivos, etc. Todos corren en paralelo. La ventaja de usar un grupo de threads en lugar de un programa normal en serie es que muchas operaciones pueden ser llevadas a cabo de forma paralela y, de esta forma, los eventos asociados a cada actividad pueden ser manejados inmediatamente tan pronto como llegan. Por otro lado, debido a que los threads dentro de un grupo comparten el mismo espacio de memoria, si uno de ellos corrompe el espacio de su memoria, los otros threads también sufrirán las consecuencias. Con un proceso, el sistema operativo normalmente protege a un proceso de otros y si un proceso corrompe su espacio de memoria los demás no se verán afectados. 
+
+Para crear varios hilos, es posible hacerlo con una lista y también es posible hacerlo con un ThreadPoolExecutor, disponible en la biblioteca concurrent.futures 
+\subsection{Puertos}
+Ya sea un Arduino o un ESP32, no sólo pueden enviar señales sino que también pueden recibirlas con dos propósitos principales como son leer datos de sensores y recibir mensajes de otros dispositivos (shield, otro Arduino, PC, etc.). Las entradas se pueden clasificar en analógicas y digitales.
+\subsubsection{Entradas análogicas} 
+Tomando como referencia Arduino, las entradas analógicas del modelo Uno son las correspondientes a los pines de A0 a A5. Se caracterizan por leer valores de tensión de 0 a 5 Voltios con una resolución de 1024 (10 bits). Si se divide 5 entre 1024, se tiene que ser capaz de detectar variaciones en el nivel de la señal de entrada de casi 5 mV.
+
+\subsubsection{Entradas digitales}
+Las entradas digitales son las mismas que las salidas digitales, es decir, los pines que van del 1 al 13. Se diferencian de las analógicas porque éstas son capaces de “entender” sólo dos niveles de señal, LOW o valores cercanos a 0 V y HIGH o valores cercanos a 5 V. Puede parecer una desventaja pero en realidad puede ser todo lo contrario. Y no sólo porque a veces únicamente se necesite saber dos estados (interruptor, pulsador, sensor de presencia, final de carrera,etc) sino porque así es capaz de leer señales de pulsos digitales.
+
+\subsection{Microcontroladores}
+No está de más hacer un breve repaso a dos de los microcontroladores más usados y útiles en la actualidad, mencionando sus principales características y ventajas de uso.
+\subsubsection{Arduino}
+Arduino es una plataforma famosa por su simplicidad y facilidad de uso, lo que la hace perfecta para principiantes y aficionados. Con un ecosistema completo que incluye tanto hardware (varias placas) como software (Arduino IDE), proporciona todo lo necesario para comenzar.
+\\Sus características principales son:
+\begin{itemize}
+    \item Variedad de Tableros: Arduino ofrece una amplia gama de placas, desde la amigable para principiantes Arduino Uno hasta modelos más avanzados como el Arduino Mega y el Arduino Due.
+    \item Facilidad de uso: El Arduino IDE es fácil de usar, y el amplio soporte de la comunidad facilita encontrar tutoriales y ayuda para la resolución de problemas.
+    \item E/S Analógica y Digital: Las placas Arduino incluyen una mezcla de pines de E/S analógicos y digitales, lo que permite la compatibilidad con varios sensores, actuadores y otros componentes.
+\end{itemize}
+Entre sus principales ventajas se tienen:
+\begin{itemize}
+    \item Fácil para principiantes: Fácil de aprender y usar, con una gran comunidad y abundantes recursos de aprendizaje.
+    \item Amplia gama de placas: Las opciones están disponibles para adaptarse a diferentes niveles de complejidad y requisitos de potencia.
+\end{itemize}
+
+\subsubsection{ESP32}
+El ESP32 es un microcontrolador increíble con capacidades integradas de Wi-Fi y Bluetooth. Desarrollado por el talentoso equipo de Espressif Systems, este pequeño gigante se ha convertido rápidamente en una opción popular para proyectos de IoT (Internet of Things) debido a sus excelentes características de conectividad y rendimiento confiable.
+\\Sus características principales son:
+\begin{itemize}
+    \item Conectividad: Una de las características destacadas del ESP32 es su Wi-Fi y Bluetooth integrados (compatible con Classic y BLE), lo que lo hace ideal para proyectos que requieren comunicación inalámbrica.
+    \item Memoria: Ofrece hasta 520 KB de RAM y hasta 4 MB de memoria flash, soportando aplicaciones complejas con facilidad.
+\end{itemize}
+Entre sus principales ventajas se tienen:
+\begin{itemize}
+    \item Alto Rendimiento: El procesador de doble núcleo y la amplia memoria le permiten manejar tareas exigentes de manera eficiente.
+    \item Conectividad Versátil: El Wi-Fi y Bluetooth integrados amplían significativamente sus posibles casos de uso.
+\end{itemize}
+\subsection{Comunicación TCP/IP}
+
+El protocolo TCP/IP (Transmission Control Protocol / Internet Protocol) es uno de los modelos de comunicación más utilizados en sistemas distribuidos debido a su confiabilidad, escalabilidad y capacidad de operar sobre redes locales y remotas. TCP/IP proporciona un mecanismo de comunicación orientado a conexión, el cual garantiza la entrega ordenada de los datos, así como la detección y corrección de errores durante la transmisión.
+
+En el presente proyecto, la comunicación TCP/IP se utiliza para establecer un enlace cliente-servidor entre una computadora personal y un microcontrolador ESP32. A través de esta conexión, se envían comandos de control desde la interfaz gráfica hacia el microcontrolador y, de manera simultánea, se reciben datos provenientes de sensores, como la temperatura ambiental. Este esquema permite una comunicación bidireccional en tiempo real, fundamental para aplicaciones de automatización y monitoreo.
+
+El uso de TCP/IP facilita además la implementación de un servidor intermedio que actúa como puente entre distintos dispositivos, permitiendo que el sistema pueda ampliarse para incluir múltiples clientes o nodos adicionales sin modificar de manera significativa la arquitectura general. De esta forma, TCP/IP se convierte en una solución robusta y flexible para el desarrollo de sistemas de control remoto y casas inteligentes.
+
+
+\subsection{Programa}
+
+\subsubsection{Mi SmartHome}
+Con esta aplicación podremos controlar nuestros dispositivos inteligentes del hogar a través de una GUI desde una computadora. Se deberá tener mínimo 4 dispositivos distintos, como focos, timbres o alarmas, cerraduras eléctricas (puede usar motores o solenoides electromagnéticos), monitoreo de temperatura, monitoreo de lluvia, sensores de movimiento, cámaras de vigilancia, entre otros. Los dispositivos inteligentes deben conectarse a internet y recibir y enviar información a través de sockets.
+% $===============================================================$
+% $===========================DESARROLLO==========================$
+% $===============================================================$
+\newpage
+\section{Desarrollo}
+\subsection{Programa. Mi SmartHome}
+Se desarrolló un sistema de casa inteligente que contó con los siguientes componentes: un sensor de temperatura, un servomotor para abrir y cerrar la puerta, leds cuya función es simular focos y un buzer que hizo de alarma, esta se activa en dos  casos, uno es al forzar la puerta y el segundo cuando la temperatura rebase 35 grados centígrados, el sistema se centró principalmente en dos componentes de software: el servidor de comunicación y la aplicación principal con interfaz gráfica, los cuales se describen a continuación.
+
+\subsubsection{Servidor de Comunicación}
+
+El servidor funciona como un intermediario entre la interfaz gráfica y el ESP32. Su función principal es aceptar múltiples conexiones TCP y reenviar mensajes entre los clientes conectados, permitiendo que la computadora y el dispositivo embebido se comuniquen de manera indirecta.
+
+Cada cliente que se conecta al servidor se identifica mediante un mensaje inicial que indica su tipo (PC o ESP32). Esta identificación permite al servidor distinguir el origen de los mensajes y reenviarlos correctamente al destinatario correspondiente.
+
+El servidor permanece escuchando en un puerto específico y maneja cada conexión de manera concurrente, asegurando que la comunicación sea continua y estable durante la ejecución del sistema.
+
+\begin{figure}[H]
+    \centering
+    % Imagen del código del servidor
+    \includegraphics[width=0.9\textwidth]{Imagenes proyecto/servidor_codigo.png}
+    \caption{Código del servidor TCP utilizado en el sistema}
+    \label{fig:servidor_codigo}
+\end{figure}
+
+\subsubsection{Interfaz Gráfica Principal}
+
+La aplicación principal fue desarrollada en QT Designer y se exporto a Python utilizando la biblioteca PySide6, lo que permitió crear una interfaz gráfica intuitiva y funcional. Desde esta interfaz, el usuario puede interactuar con los distintos elementos de la casa inteligente.
+
+La interfaz se encarga de establecer la conexión con el servidor TCP y mantener una comunicación constante para el envío de comandos y la recepción de datos provenientes del ESP32.
+\begin{figure}[H]
+    \centering
+    % Imagen del código del servidor
+    \includegraphics[width=0.9\textwidth]{Imagenes proyecto/interfaz.png}
+    \caption{Interfaz grafica diseñada en Qt Designer.}
+    \label{fig:interfaz}
+\end{figure}
+
+\subsubsection{Gestión de Comunicación}
+
+Para evitar bloqueos en la interfaz gráfica, la recepción de mensajes se implementó en un hilo independiente. Este hilo escucha continuamente los datos recibidos desde el servidor y emite señales hacia la interfaz principal cuando se recibe información relevante, como lecturas de temperatura.
+
+El uso de un socket con tiempo de espera permitió que el hilo se cerrara correctamente al finalizar la aplicación, evitando errores comunes relacionados con hilos activos al cerrar la interfaz.
+
+\begin{figure}[H]
+    \centering
+    % Imagen del código del hilo receptor
+    \includegraphics[width=0.9\textwidth]{Imagenes proyecto/receiver_thread.png}
+    \caption{Implementación del hilo receptor para la comunicación TCP}
+    \label{fig:receiver_thread}
+\end{figure}
+
+\subsubsection{Monitoreo de Temperatura}
+
+La interfaz gráfica muestra en tiempo real la temperatura medida por el sensor conectado al ESP32. Cada vez que se recibe un mensaje con el valor de temperatura, este se procesa y se actualiza el indicador visual correspondiente.
+
+Cuando la temperatura supera un umbral predefinido, el sistema activa una alerta visual y sonora, notificando al usuario sobre una posible condición de riesgo.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes proyecto/temperatura_gui.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes proyecto/codigo_temp.png}
+    \end{subfigure}
+    \caption{Codigo y visualización de la temperatura}
+    \label{fig:brazo_comparacion}
+\end{figure}
+
+\subsubsection{Control de Iluminación}
+
+La interfaz permite encender y apagar focos de distintas áreas de la casa de manera individual o general. Para ello, se utilizan ventanas emergentes que permiten al usuario seleccionar la habitación deseada.
+
+Los comandos seleccionados se envían al servidor, el cual los retransmite al ESP32 para ejecutar la acción física correspondiente.
+
+\subsubsection{Control de Puerta Automática}
+
+El sistema incluye el control de una puerta automática, cuyo estado se representa visualmente mediante una barra de progreso. Esta barra simula el tiempo de apertura y cierre de la puerta, proporcionando retroalimentación visual al usuario.
+
+La lógica implementada evita movimientos innecesarios, ya que la puerta solo responde a comandos válidos según su estado actual.
+\begin{figure}[H]
+    \centering
+    % Imagen del código del hilo receptor
+    \includegraphics[width=0.9\textwidth]{Imagenes proyecto/puerta.png}
+    \caption{Código implementado para la puerta}
+    \label{fig:receiver_thread}
+\end{figure}
+
+\subsubsection{Modo Seguro}
+
+El modo seguro es una función diseñada para restringir el acceso cuando el sistema se encuentra en un estado de alerta. Al activarse:
+\begin{itemize}
+    \item Se bloquea la apertura de la puerta.
+    \item Se genera una alerta visual y sonora si se intenta acceder.
+    \item Si la puerta está abierta, se cierra automáticamente.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    % Imagen del código del hilo receptor
+    \includegraphics[width=0.9\textwidth]{Imagenes proyecto/modo_seg.png}
+    \caption{Código implementado para el modo seguro}
+    \label{fig:receiver_thread}
+\end{figure}
+% $===============================================================$
+% $==========================CONCLUSIONES=========================$
+% $===============================================================$
+\section{Conclusion}
+\subsection{Aboytes Arana Moises Antonio}
+Esta práctica me permitió reforzar conceptos fundamentales de programación avanzada, comunicación entre procesos, manejo de interfaces gráficas y sistemas embebidos, demostrando la importancia de integrar diferentes tecnologías para el desarrollo de soluciones completas y funcionales en aplicaciones de automatización y control, además se logró un sistema, integrando software y hardware mediante una arquitectura distribuida basada en comunicación TCP/IP. La correcta interacción entre la interfaz gráfica, el servidor y los dispositivos embebidos permitió el control y monitoreo de distintos elementos del sistema. La importancia de una interfaz gráfica fácil de entender para su uso, facilitó la interacción del usuario con el sistema, permitiendo enviar comandos de manera intuitiva y visualizar información relevante en tiempo real. Asimismo, la implementación de hilos y temporizadores garantizó un comportamiento responsivo de la aplicación, evitando bloqueos y asegurando una correcta gestión de los procesos concurrentes. Por otro lado, la comunicación en red permitió separar las responsabilidades del sistema, delegando el control físico de los dispositivos a la unidad embebida, mientras que el servidor actuó como intermediario para el intercambio de información. Esta separación contribuyó a una arquitectura más ordenada, escalable y fácil de mantener.
+
+\section*{Bibliografía}
+\addcontentsline{toc}{section}{Bibliografía}
+
+[1] “Hilo en computación: ¿Qué es? | Lenovo México”. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url{https://www.lenovo.com/mx/es/glosario/hilo/}
+
+[2] “Hilos”. Unidades de Apoyo para el Aprendizaje - CUAED - UNAM. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: 
+\url {https://repositorio uapa.cuaed.unam.mx/repositorio/moodle/pluginfile.php/3084/mod_resource/content/1/UAPA-Hilos/index.html}
+
+[3] “Python - Daemon Threads”. Free Tutorials on Technical and Non Technical Subjects. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url {https://www.tutorialspoint.com/python/python_daemon_threads.htm}
+
+[4] FCC - Facultad de Ciencias de la Computación BUAP. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url {https://www.cs.buap.mx/~mceron/cap2_dis.pdf}
+
+[5] “Multithread”. UNIVERSIDAD AUTONOMA DEL ESTADO DE HIDALGO. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url {https://sakuhina.tripod.com/id11.html}
+
+[6] J. L. Cruz Mora. “Hilos”. Classroom. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url {https://drive.google.com/file/d/11tPujCUpnpZ1VgUVSwQlkLP6nF2X8_Qo/view?hl=es}
+
+[7] Guillermo Perez. “Tutorial Arduino: Entradas AnalÃ³gicas y Digitales | OpenWebinars”. OpenWebinars.net. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url {https://openwebinars.net/blog/tutorial-arduino-entradas-analogicas-y-digitales/}
+
+[8] “ESP32 vs Arduino vs Raspberry Pi Pico: ¿Cuál es mejor?” OpenELAB Technology Ltd. Accedido el 16 de noviembre de 2025. [En línea]. Disponible en: \url {https://openelab.io/es/blogs/learn/esp32-vs-arduino-vs-raspberry-pi-pico-which-is-better?srsltid=AfmB\\OopgVyK4bXqL88VSd21CFQPMQ65MAcvXtbDMBlXHLA3IHOBfT70z}
+
+\end{document}
